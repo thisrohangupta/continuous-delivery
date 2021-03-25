@@ -1,0 +1,14 @@
+name: rohan-cdng
+replicas: 1
+image: <+artifact.image>
+
+
+createNamespace: true
+namespace: <+infrastructure.namespace>
+
+
+env:
+  config:
+    key1: harnessDemo
+  secrets:
+    key2: thisSecret
