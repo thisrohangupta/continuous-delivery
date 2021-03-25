@@ -1,0 +1,104 @@
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    mountPath: /grafana-dashboard-definitions/0/micrometer
+    name: grafana-dashboard-micrometer
+    readOnly: false
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    configMap:
+      name: grafana-dashboard-micrometer
+    name: grafana-dashboard-micrometer
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    mountPath: /grafana-dashboard-definitions/0/zipkin
+    name: grafana-dashboard-zipkin
+    readOnly: false
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    configMap:
+      name: grafana-dashboard-zipkin
+    name: grafana-dashboard-zipkin
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    mountPath: /grafana-dashboard-definitions/0/spring-cloud-gateway
+    name: grafana-dashboard-spring-cloud-gateway
+    readOnly: false
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    configMap:
+      name: grafana-dashboard-spring-cloud-gateway
+    name: grafana-dashboard-spring-cloud-gateway
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    mountPath: /grafana-dashboard-definitions/0/ingress-nginx
+    name: grafana-dashboard-ingress-nginx
+    readOnly: false
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    configMap:
+      name: grafana-dashboard-ingress-nginx
+    name: grafana-dashboard-ingress-nginx
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    mountPath: /grafana-dashboard-definitions/0/system
+    name: grafana-dashboard-system
+    readOnly: false
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    configMap:
+      name: grafana-dashboard-system
+    name: grafana-dashboard-system
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    mountPath: /grafana-dashboard-definitions/0/postgres
+    name: grafana-dashboard-postgres
+    readOnly: false
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    configMap:
+      name: grafana-dashboard-postgres
+    name: grafana-dashboard-postgres
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    mountPath: /grafana-dashboard-definitions/0/probe
+    name: grafana-dashboard-probe
+    readOnly: false
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    configMap:
+      name: grafana-dashboard-probe
+    name: grafana-dashboard-probe
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    mountPath: /grafana-dashboard-definitions/0/bosh
+    name: grafana-dashboard-bosh
+    readOnly: false
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    configMap:
+      name: grafana-dashboard-bosh
+    name: grafana-dashboard-bosh
+- op: add
+  path: /spec/template/spec/containers/0/env
+  value:
+  - name: GF_SECURITY_ADMIN_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        key: grafana-password
+        name: grafana-secret

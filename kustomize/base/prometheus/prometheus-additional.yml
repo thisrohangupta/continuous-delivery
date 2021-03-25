@@ -1,0 +1,161 @@
+- job_name: blackbox
+  metrics_path: /probe
+  params:
+    module:
+    - http
+  static_configs:
+  - targets:
+    - https://blog.ik.am
+    - https://blog.ik.am/entries/412
+    - https://blog.ik.am/actuator/health
+    - https://blog-api.ik.am/actuator/health
+    - https://k8s.bosh.tokyo/healthz
+    - https://uaa.bosh.tokyo/info
+    - https://10.0.8.252:25555/info
+    - https://zipkin.dev.ik.am/actuator/health
+    - https://blog-rsocket.ik.am/actuator/health
+  relabel_configs:
+  - source_labels: [__address__]
+    regex: (.*)
+    target_label: __param_target
+    replacement: ${1}
+  - source_labels: [__param_target]
+    regex: (.*)
+    target_label: instance
+    replacement: ${1}
+  - source_labels: []
+    regex: .*
+    target_label: __address__
+    replacement: 10.0.8.4:9115
+- job_name: "node-exporter"
+  scrape_interval: 30s
+  dns_sd_configs:
+  - names:
+    - "q-s4.*.bosh"
+    type: "A"
+    port: 9100
+- job_name: "bosh"
+  scrape_interval: 2m
+  scrape_timeout: 1m
+  dns_sd_configs:
+  - names:
+    - "q-s4.uaa-db.*.cfcr.bosh"
+    type: "A"
+    port: 9190
+- job_name: "postgres"
+  dns_sd_configs:
+  - names:
+    - "q-s4.uaa-db.*.cfcr.bosh"
+    type: "A"
+    port: 9187
+- job_name: prometheus-proxy-connected
+  scrape_interval: 30s
+  scrape_timeout: 10s
+  metrics_path: /metrics/connected
+  dns_sd_configs:
+  - names:
+    - prometheus-proxy.monitoring-tools.svc.cluster.local
+    type: "A"
+    port: 8080
+- job_name: prometheus-proxy
+  scrape_interval: 1m
+  scrape_timeout: 10s
+  metrics_path: /metrics/proxy
+  dns_sd_configs:
+  - names:
+    - prometheus-proxy.monitoring-tools.svc.cluster.local
+    type: "A"
+    port: 8080
+- job_name: "zipkin"
+  scrape_interval: 30s
+  scrape_timeout: 10s
+  metrics_path: /actuator/prometheus
+  scheme: https
+  static_configs:
+  - targets:
+    - zipkin.dev.ik.am:443
+    labels:
+      organization: maki
+      space: observability
+      application: zipkin
+      instance_id: zipkin:0
+- job_name: "jjug-enquete"
+  scrape_interval: 30s
+  scrape_timeout: 10s
+  metrics_path: /actuator/prometheus
+  scheme: https
+  static_configs:
+  - targets:
+    - jjug-enquete.cfapps.io:443
+    labels:
+      organization: APJ
+      space: production
+      application: jjug-enquete
+      instance_id: jjug-enquete:0
+- job_name: "jsug-enquete"
+  scrape_interval: 30s
+  scrape_timeout: 10s
+  metrics_path: /actuator/prometheus
+  scheme: https
+  static_configs:
+  - targets:
+    - jsug-enquete.cfapps.io:443
+    labels:
+      organization: APJ
+      space: production
+      application: jsug-enquete
+      instance_id: jsug-enquete:0
+- job_name: cluster-metric-sinks
+  dns_sd_configs:
+  - names:
+    - q-s4.worker.*.*.bosh.
+    type: A
+    port: 31000
+# - job_name: "node-exporter-zipkin"
+#   scrape_interval: 30s
+#   scrape_timeout: 10s
+#   static_configs:
+#   - targets:
+#     - 40.115.181.175:9100
+# - job_name: "node-exporter-bosh-home"
+#   scrape_interval: 30s
+#   scrape_timeout: 10s
+#   scheme: https
+#   static_configs:
+#   - targets:
+#     - bosh-node-exporter.home.ik.am:14073
+# - job_name: "concourse-exporter-home"
+#   scrape_interval: 30s
+#   scrape_timeout: 10s
+#   scheme: https
+#   static_configs:
+#   - targets:
+#     - concourse-exporter.home.ik.am:14073
+# - job_name: pushgateway
+#   scrape_interval: 30s
+#   scrape_timeout: 10s
+#   scheme: https
+#   static_configs:
+#   - targets:
+#     - pushgateway.k8s.bosh.tokyo:443
+# - job_name: "pivotal-io-2019"
+#   scrape_interval: 30s
+#   scrape_timeout: 10s
+#   metrics_path: /metrics/connected
+#   scheme: https
+#   static_configs:
+#   - targets:
+#     - prometheus-rsocket-proxy.apps.pcfone.io:443
+#   metric_relabel_configs:
+#   - source_labels: [space_name]
+#     regex: (.*)
+#     target_label: namespace
+#     replacement: ${1}
+#   - source_labels: [app_name]
+#     regex: (.*)
+#     target_label: job
+#     replacement: ${1}
+#   - source_labels: [cf_instance_id]
+#     regex: (.*)
+#     target_label: pod
+#     replacement: ${1}

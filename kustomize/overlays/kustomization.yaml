@@ -1,0 +1,51 @@
+bases:
+- ../base
+patchesJson6902:
+- target:
+    group: ""
+    version: v1
+    kind: Service
+    name: alertmanager-main
+  path: service-alertmanager-main.yml
+- target:
+    group: ""
+    version: v1
+    kind: Service
+    name: grafana
+  path: service-grafana.yml
+- target:
+    group: ""
+    version: v1
+    kind: Service
+    name: prometheus-k8s
+  path: service-prometheus-k8s.yml
+- target:
+    group: monitoring.coreos.com
+    version: v1
+    kind: Alertmanager
+    name: main
+  path: alertmanager-main.yml
+- target:
+    group: monitoring.coreos.com
+    version: v1
+    kind: Prometheus
+    name: k8s
+  path: prometheus-k8s.yml
+- target:
+    group: rbac.authorization.k8s.io
+    version: v1
+    kind: ClusterRole
+    name: prometheus-k8s
+  path: clusterrole-prometheus-k8s.yml
+- target:
+    group: apps
+    version: v1beta2
+    kind: Deployment
+    name: grafana
+  path: deployment-grafana.yml
+- target:
+    group: monitoring.coreos.com
+    version: v1
+    kind: PrometheusRule
+    name: prometheus-k8s-rules
+  path: prometheusrule-prometheus-k8s-rules.yml
